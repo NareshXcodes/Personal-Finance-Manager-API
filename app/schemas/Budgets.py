@@ -4,11 +4,9 @@ from datetime import datetime
 
 
 class BudgetCreate(BaseModel):
-    id : int
     name : str
     category : Literal["food","transport","utilities","entertainment","health"]
     monthly_limit : float
-    created_at : datetime
 
 class BudgetUpdate(BaseModel):
     name: Optional[str] = None

@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from app.routers import expenses , budgets
+from app.db.database import Base, engine
+
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
