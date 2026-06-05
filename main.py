@@ -18,5 +18,5 @@ def root():
 def get_monthly_report():
     return {"message" : "May Monthly Report is On the Way !!"}
 
-app.include_router(expenses.router , prefix="/expenses")
-app.include_router(budgets.router , prefix="/budgets")
+app.include_router(expenses.router)
+app.include_router(budgets.router)

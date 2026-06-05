@@ -1,17 +1,17 @@
 from pydantic import BaseModel , ConfigDict
 from typing import Literal , Optional
 from datetime import datetime
-
+from decimal import Decimal
 
 class ExpenseCreate(BaseModel):
     title : str
-    amount : float
+    amount : Decimal
     category : Literal["food","transport","utilities","entertainment","health"]
     budget_id : Optional[int] = None
 
 class ExpenseUpdate(BaseModel):
     title : Optional[str] = None
-    amount : Optional[float] = None
+    amount : Optional[Decimal] = None
     category : Optional[Literal["food","transport","utilities","entertainment","health"]] = None
     budget_id : Optional[int] = None
 
