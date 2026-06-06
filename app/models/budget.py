@@ -14,6 +14,8 @@ class CategoryEnum(str, PyEnum):
     utilities = "utilities"
     entertainment = "entertainment"
     health = "health"
+    education = "education"
+    shopping = "shopping"
 
 class Budget(Base):
     __tablename__ = "budgets"

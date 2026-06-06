@@ -3,6 +3,7 @@ from typing import Optional
 from app.models.expense import Expense
 from app.schemas.Expenses import ExpenseCreate , ExpenseUpdate , ExpenseResponse
 from app.db.deps import SessionDep
+from datetime import datetime
 
 router = APIRouter(prefix="/expenses",tags=["Expenses"])
 
@@ -54,3 +55,31 @@ def update_expense(id:int, db:SessionDep ,update_expense : ExpenseUpdate ):
     db.commit()
     db.refresh(updated_expense)
     return updated_expense
+
+@router.get("/report/monthly")
+def last_month_report(db:SessionDep):
+    now = datetime.now()
+    start_of_month = datetime(now.year, now.month, 1)
+    if now.month == 12:
+        end_of_month = datetime(now.year + 1, 1, 1)
+    else:
+        end_of_month = datetime(now.year, now.month + 1, 1)
+
+    expenses = db.query(Expense).filter(Expense.created_at >= start_of_month , Expense.created_at < end_of_month).all()
+
+    totals = dict()
+
+    for expense in expenses:
+        category = expense.category
+        if category not in totals:
+            totals[category] = 0
+
+        totals[category] += expense.amount
+        
+    result = []
+
+    for category , spent in totals.items():
+        data = {"category" : category , "total" : spent}
+        result.append(data)
+
+    return result

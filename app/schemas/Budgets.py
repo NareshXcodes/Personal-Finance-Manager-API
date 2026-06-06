@@ -6,12 +6,12 @@ from decimal import Decimal
 
 class BudgetCreate(BaseModel):
     name : str
-    category : Literal["food","transport","utilities","entertainment","health"]
+    category : Literal["food","transport","utilities","entertainment","health","education","shopping"]
     monthly_limit : Decimal
 
 class BudgetUpdate(BaseModel):
     name: Optional[str] = None
-    category: Optional[Literal["food", "transport", "utilities", "entertainment", "health"]] = None
+    category: Optional[Literal["food", "transport", "utilities", "entertainment", "health","education","shopping"]] = None
     monthly_limit: Optional[Decimal] = None
 
 class BudgetResponse(BudgetCreate):

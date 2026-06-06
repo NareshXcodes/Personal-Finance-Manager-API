@@ -1,15 +1,17 @@
 from fastapi import APIRouter , HTTPException , status , Response
-from typing import Optional
+from typing import List
 from app.schemas.Budgets import BudgetCreate , BudgetUpdate , BudgetResponse
 from app.schemas.BudgetSummaryResponse import BudgetSummaryResponse
 from app.models.budget import Budget
 from app.models.expense import Expense
 from app.db.deps import SessionDep
+from decimal import Decimal
+from app.schemas.Expenses import ExpenseResponse
 
 router = APIRouter(prefix="/budgets",tags=["Budgets"])
 
 
-@router.get("/", response_model=list[BudgetResponse])
+@router.get("/", response_model=List[BudgetResponse])
 def get_all_budget(db: SessionDep):
     all_budgets = db.query(Budget).all()
     return all_budgets
@@ -62,26 +64,42 @@ def update_budget(id:int,update_budget : BudgetUpdate,db:SessionDep):
     db.refresh(updated_budget)
     return {"data": updated_budget}
 
-@router.get("/{id}/summary")
-def get_budget_summary(id:int,db:SessionDep):
+@router.get("/{id}/summary", response_model=BudgetSummaryResponse)
+def get_budget_summary(id: int, db: SessionDep):
     budget = db.get(Budget, id)
-    total_spent = sum(Expense.amount for Expense in budget.expenses)
-    remaining = budget.monthly_limit - total_spent
-    percent_used = (
-        total_spent / budget.monthly_limit
-    ) * 100
+    print("budget:", budget)
 
-    summary = BudgetSummaryResponse(
+    if budget is None:
+        raise HTTPException(status_code=404, detail="Budget not found")
+
+    print("expenses:", budget.expenses)
+
+    total_spent = sum((expense.amount for expense in budget.expenses), Decimal("0"))
+    print("total_spent:", total_spent)
+
+    remaining = budget.monthly_limit - total_spent
+
+    if budget.monthly_limit == Decimal("0"):
+        percent_used = Decimal("0")
+    else:
+        percent_used = (total_spent / budget.monthly_limit) * Decimal("100")
+
+    return BudgetSummaryResponse(
         budget_name=budget.name,
         category=budget.category,
         monthly_limit=budget.monthly_limit,
         total_spent=total_spent,
         remaining=remaining,
-        percent_used=percent_used
+        percent_used=percent_used,
     )
 
-    return summary
+@router.get("/{id}/expenses" , response_model= List[ExpenseResponse])
+def get_budget_expenses(id:int , db: SessionDep):
+    # query = db.query(Budget).filter(Budget.id == id).first()
+    # expenses = query.expenses # One to Many Relationship SQLAlchemy model 
 
-@router.get("/{id}/expenses")
-def get_budget_expenses(id:int):
-    pass
+    expenses = db.query(Expense).filter(Expense.budget_id == id).all()
+
+    if expenses == None :
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,detail= f"Expenses Not Found with this Budget Id = {id}")
+    return expenses

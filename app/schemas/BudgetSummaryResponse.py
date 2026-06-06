@@ -5,7 +5,7 @@ from decimal import Decimal
 
 class BudgetSummaryResponse(BaseModel):
     budget_name : str
-    category : Literal["food","transport","utilities","entertainment","health"]
+    category : Literal["food","transport","utilities","entertainment","health","education","shopping"]
     monthly_limit : Decimal
     total_spent : Decimal
     remaining : Decimal

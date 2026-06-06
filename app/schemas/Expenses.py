@@ -6,13 +6,13 @@ from decimal import Decimal
 class ExpenseCreate(BaseModel):
     title : str
     amount : Decimal
-    category : Literal["food","transport","utilities","entertainment","health"]
+    category : Literal["food","transport","utilities","entertainment","health","education","shopping"]
     budget_id : Optional[int] = None
 
 class ExpenseUpdate(BaseModel):
     title : Optional[str] = None
     amount : Optional[Decimal] = None
-    category : Optional[Literal["food","transport","utilities","entertainment","health"]] = None
+    category : Optional[Literal["food","transport","utilities","entertainment","health","education","shopping"]] = None
     budget_id : Optional[int] = None
 
 
