@@ -14,7 +14,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://personal-finance-manager-app-nareshxcodes-projects.vercel.app"
+        "https://personal-finance-manager-app-one.vercel.app/",
+        "https://personal-finance-manager-app-nareshxcodes-projects.vercel.app/"
+
     ],
     allow_credentials=True,
     allow_methods=["*"],
