@@ -14,7 +14,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://personal-finance-manager-api-z8u8.onrender.com/"
+        "https://personal-finance-manager-app-nareshxcodes-projects.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
