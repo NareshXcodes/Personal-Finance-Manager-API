@@ -19,4 +19,5 @@ class ExpenseUpdate(BaseModel):
 class ExpenseResponse(ExpenseCreate):
     id : int
     created_at : datetime
+    owner_id : int
     model_config = ConfigDict(from_attributes = True)

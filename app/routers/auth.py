@@ -6,11 +6,11 @@ from app.utils.hashing import verify_password , hash_password
 from app.utils.jwt import create_access_token , verify_access_token
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from app.utils.oauth2 import get_current_user
-
+from app.schemas.User import TokenResponse
 
 router = APIRouter(prefix="/auth" ,tags=["Auth"])
 
-@router.post("/login")
+@router.post("/login", response_model=TokenResponse)
 def login(db:SessionDep,user_credential : OAuth2PasswordRequestForm = Depends()):
     user = db.query(User).filter(User.email == user_credential.username).first()
 
