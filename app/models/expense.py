@@ -16,6 +16,21 @@ class Expense(Base):
     category: Mapped[CategoryEnum] = mapped_column(SQLEnum(CategoryEnum), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
+    # Ownership for Budget
     budget_id: Mapped[Optional[int]] = mapped_column(ForeignKey("budgets.id", ondelete="SET NULL"), nullable=True)
 
-    budget: Mapped[Optional["Budget"]] = relationship("Budget", back_populates="expenses")
+    budget: Mapped[Optional["Budget"]] = relationship(
+        "Budget", 
+        back_populates="expenses"
+    )
+
+    #ownership for User
+    owner_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    user: Mapped["User"] = relationship(
+        "User",
+        back_populates="expenses"
+    )

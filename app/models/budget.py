@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import List
+from typing import List , Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, Numeric, DateTime, func
+from sqlalchemy import String, Integer, Numeric, DateTime, func ,ForeignKey
 from app.db.database import Base
 from decimal import Decimal
 from enum import Enum as PyEnum
@@ -27,4 +27,9 @@ class Budget(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     expenses: Mapped[List["Expense"]] = relationship("Expense", back_populates="budget")
+
+    # FK and Ownernship for users
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+
+    user: Mapped["User"] = relationship("User", back_populates="budgets")
     

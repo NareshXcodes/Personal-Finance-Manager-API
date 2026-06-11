@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from app.routers import expenses , budgets
+from app.routers import expenses , budgets , auth
 from app.db.database import Base, engine
-from app.db.deps import SessionDep
 from app.models.budget import Budget
 from app.models.expense import Expense
+from app.models.user import User
 from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
@@ -31,3 +31,4 @@ def root():
 
 app.include_router(expenses.router)
 app.include_router(budgets.router)
+app.include_router(auth.router)
